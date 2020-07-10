@@ -1,29 +1,119 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
 
 function BoasVindas(props) {
 
-  const [mensagem, setMensagem] = useState('Seja bem-vindo(a)!');
+  const [nome, setNome] = useState('');
+
+  const [sobrenome, setSobrenome] = useState('');
+
+  const [mensagem, setMensagem] = useState('Seja bem-vindo(a)');
+  
+  const [mostraMensagem, setMostraMensagem] = useState(false);
+
+  const _apresentarMensagem = () => {
+
+    if (!nome == '' && !sobrenome == '') {
+
+      setMostraMensagem(true);
+
+    } else {
+
+      Alert.alert(
+        'O preencimento é obrigatório',
+        'Informe o nome e o sobrenome!',
+
+        [
+          { text: 'OK' },
+        ],
+
+      );
+    }
+  }
+
+  const _limpar = () => {
+    setNome('');
+    setSobrenome('');
+    setMostraMensagem(false);
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.texto}>Olá {props.saudacao}</Text>
-      <Text style={styles.texto}>{mensagem}</Text>
+
+      <Text style={styles.titulo}>Identifique-se</Text>
+
+      <TextInput
+        style={styles.campo}
+        placeholder="Digite seu nome"
+        onChangeText={nome => setNome(nome)}
+        value={nome}
+      />
+
+      <TextInput
+          style={styles.campo}
+          placeholder="Digite seu sobrenome"
+          onChangeText={sobrenome => setSobrenome(sobrenome)}
+          value={sobrenome}
+      />
+
+      <View style={styles.botaoContainer}>
+        <Button
+          onPress={_apresentarMensagem}
+          title="identificar"
+        />
+      </View>
+
+      {mostraMensagem && (
+        <View>
+          <Text style={styles.textos}>Olá, {nome} {sobrenome}! {props.saudacao}</Text>
+
+          <Text style={styles.textos}>{mensagem}</Text>
+        </View>
+      )}
+
+      <View style={styles.botaoContainer}>
+        <Button
+          onPress={_limpar}
+          title="Limpar"
+        />
+      </View>
+
     </View>
   )
 }
 const styles = StyleSheet.create({
   container: {
-     backgroundColor: '#081a31',
+     backgroundColor: 'aliceblue',
      width: 300,
      borderRadius: 5,
      padding: 10,
      margin: 10
   },
-  texto: {
-    fontSize: 14,
-    color: '#FFFFFF',
+  titulo: {
+    fontSize: 16,
+    color: 'darkgray',
+    fontWeight: 'bold',
     textAlign: "center",
+    paddingBottom: 5,
+  },
+  textos: {
+     fontSize: 14,
+     color: 'darkgray',
+     textAlign: "center",
+     paddingLeft: 5,
+  },
+  campo: {
+    backgroundColor: '#dcedff',
+    fontSize: 14,
+    marginBottom: 5,
+    marginTop: 5,
+    borderRadius: 5,
+    height: 35,
+  },
+  botaoContainer: {
+    marginBottom: 5,
+    marginTop: 5,
+    borderRadius: 15,
   },
 });
 export default BoasVindas;
